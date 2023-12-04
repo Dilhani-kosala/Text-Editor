@@ -54,6 +54,9 @@
 <body>
 <center>
     <div class="button">
+        <button onclick="boldText()" class= "button" > 
+            <img src="Resource/bold-xxl.png" width="15" height="15"> 
+        </button>
 
 
 
@@ -71,6 +74,15 @@
 </div>
 
 <script>
+let editor = document.getElementById('editor');
+
+function formatText(command, value = null) {
+    document.execCommand(command, false, value);
+}
+
+function boldText() {
+    formatText('bold');
+}
     
 
 
