@@ -87,6 +87,14 @@
             <img src="Resource/justify.png" width="15" height="15"> 
         </button>
 
+        <button onclick="undo()" class= "button">
+            <img src = "Resource/undo-4-32.png" width="15" height="15"> 
+        </button>
+
+        <button onclick="redo()" class= "button"> 
+            <img src = "Resource/action-redo-32.png" width="15" height="15"> 
+        </button>
+
 
 
 
@@ -104,6 +112,10 @@
 
 <script>
 let editor = document.getElementById('editor');
+
+        let undoStack = [];
+        let redoStack = [];
+
 
 function formatText(command, value = null) {
     document.execCommand(command, false, value);
@@ -146,13 +158,29 @@ const validAlignments = ['left', 'center', 'right', 'justify'];
     }
 }
 
+function saveState() {
+            undoStack.push(editor.innerHTML);
+            redoStack = [];
+        }
 
+function undo() {
+    if (undoStack.length > 1) {
+        redoStack.push(undoStack.pop());
+        editor.innerHTML = undoStack[undoStack.length - 1];
+    }
+}
 
+function redo() {
+    if (redoStack.length > 0) {
+        undoStack.push(redoStack.pop());
+        editor.innerHTML = undoStack[undoStack.length - 1];
+    }
+}
+
+editor.addEventListener('input', saveState);
+        
 
 </script>
-
-
-
 </body>
 <!-- Author: K.A. Kosala Dilhani| CT/2019/014 -->
 </html>
