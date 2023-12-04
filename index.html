@@ -66,6 +66,11 @@
             <img src = "Resource/italic-xxl.png" width="15" height="15">
         </button>
 
+        <label for="font-color-picker" class="color-picker-label">
+            <input type="color" class="color-picker" id="font-color-picker" onchange="changeFontColor(this.value)">
+            <img src="Resource/font-color_40448.png" width="24" height="20" >
+        </label>
+
 
 
 
@@ -98,6 +103,11 @@ function underlineText() {
 
 function italicText() {
     formatText('italic');
+}
+
+function changeFontColor(selectedColor) {
+    document.execCommand('foreColor', false, selectedColor);
+    saveState(); 
 }
     
 
