@@ -54,6 +54,46 @@
 <body>
 <center>
     <div class="button">
+        <button onclick="boldText()" class= "button" > 
+            <img src="Resource/bold-xxl.png" width="15" height="15"> 
+        </button>
+
+        <button onclick="underlineText()" class= "button"> 
+            <img src = "Resource/format_underline_white_192x192.png" width="28" height="18">
+        </button> 
+
+        <button onclick="italicText()" class= "button"> 
+            <img src = "Resource/italic-xxl.png" width="15" height="15">
+        </button>
+
+        <label for="font-color-picker" class="color-picker-label">
+            <input type="color" class="color-picker" id="font-color-picker" onchange="changeFontColor(this.value)">
+            <img src="Resource/font-color_40448.png" width="24" height="20" >
+        </label>
+
+        <button onclick="changeTextAlignment('left')" class="button"> 
+            <img src="Resource/left.png" width="15" height="15"> 
+        </button>
+
+        <button onclick="changeTextAlignment('center')" class="button"> 
+            <img src="Resource/center.png" width="15" height="15"> 
+        </button>
+
+        <button onclick="changeTextAlignment('right')" class="button"> 
+            <img src="Resource/right.png" width="15" height="15"> 
+        </button>
+
+        <button onclick="changeTextAlignment('justify')" class="button"> 
+            <img src="Resource/justify.png" width="15" height="15"> 
+        </button>
+
+        <button onclick="undo()" class= "button">
+            <img src = "Resource/undo-4-32.png" width="15" height="15"> 
+        </button>
+
+        <button onclick="redo()" class= "button"> 
+            <img src = "Resource/action-redo-32.png" width="15" height="15"> 
+        </button>
 
 
 
@@ -71,13 +111,76 @@
 </div>
 
 <script>
-    
+let editor = document.getElementById('editor');
 
+        let undoStack = [];
+        let redoStack = [];
+
+
+function formatText(command, value = null) {
+    document.execCommand(command, false, value);
+}
+
+function boldText() {
+    formatText('bold');
+}
+
+function underlineText() {
+     formatText('underline');
+}
+
+function italicText() {
+    formatText('italic');
+}
+
+function changeFontColor(selectedColor) {
+    document.execCommand('foreColor', false, selectedColor);
+    saveState(); 
+}
+
+function changeTextAlignment(align) {
+const validAlignments = ['left', 'center', 'right', 'justify'];
+
+    if (validAlignments.includes(align)) {
+        const editor = document.getElementById('editor-text');
+        document.execCommand('styleWithCSS', false, true); 
+        document.execCommand('justify' + align.charAt(0).toUpperCase() + align.slice(1), false, null); 
+
+        if (align === 'justify') {
+            document.execCommand('justifyFull');
+        } else {
+            editor.style.textAlign = align;
+        }
+
+        saveState(); 
+    } else {
+        console.error('Invalid alignment value provided.');
+    }
+}
+
+function saveState() {
+            undoStack.push(editor.innerHTML);
+            redoStack = [];
+        }
+
+function undo() {
+    if (undoStack.length > 1) {
+        redoStack.push(undoStack.pop());
+        editor.innerHTML = undoStack[undoStack.length - 1];
+    }
+}
+
+function redo() {
+    if (redoStack.length > 0) {
+        undoStack.push(redoStack.pop());
+        editor.innerHTML = undoStack[undoStack.length - 1];
+    }
+}
+
+editor.addEventListener('input', saveState);
+        
 
 </script>
-
-
-
 </body>
 <!-- Author: K.A. Kosala Dilhani| CT/2019/014 -->
 </html>
